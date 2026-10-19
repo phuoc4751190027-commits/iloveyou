@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Món Quà Ngọt Ngào 20/10 Dành Tặng Em</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Montserrat:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Canvas Confetti Library -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <!-- Tailwind Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        roseGold: '#E8A598',
+                        romanticRed: '#D84315',
+                        softPink: '#FFEFF2',
+                        blushPink: '#FFD1DC',
+                        deepRose: '#C2185B',
+                        goldAccent: '#DFB15B'
+                    },
+                    fontFamily: {
+                        dancing: ['"Dancing Script"', 'cursive'],
+                        quicksand: ['"Quicksand"', 'sans-serif'],
+                        montserrat: ['"Montserrat"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- External Custom Style -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="min-h-screen text-slate-800 relative selection:bg-pink-300">
+
+   <audio id="bgMusic" src="lovestory.mp3" loop></audio>
+    <!-- Petals Floating Overlay Canvas -->
+    <canvas id="petalCanvas"></canvas>
+
+    <!-- Floating Audio Control Player -->
+    <div id="audioPlayer" class="fixed top-4 right-4 z-50 glass-panel px-3 py-2 rounded-full flex items-center gap-3 shadow-lg transition-all duration-300">
+        <div class="relative w-10 h-10 flex items-center justify-center">
+            <div id="vinylDisk" class="w-10 h-10 rounded-full bg-slate-900 border-2 border-roseGold flex items-center justify-center vinyl-spin paused shadow-md">
+                <div class="w-3 h-3 rounded-full bg-rose-200 border border-rose-600"></div>
+            </div>
+            <i class="fa-solid fa-music text-rose-500 absolute text-xs pointer-events-none"></i>
+        </div>
+        <div class="text-xs hidden sm:block pr-1">
+            <div class="font-bold text-rose-700">Giai Điệu Ngọt Ngào</div>
+            <div id="audioStatusText" class="text-slate-500 text-[10px]">Đang tạm dừng</div>
+        </div>
+        <button id="toggleMusicBtn" class="w-8 h-8 rounded-full bg-rose-500 text-white flex items-center justify-center hover:bg-rose-600 transition text-xs shadow">
+            <i class="fa-solid fa-play" id="playIcon"></i>
+        </button>
+    </div>
+
+    <!-- 1. LANDING HERO SCREEN (Màn hình khóa / Mở quà) -->
+    <section id="heroScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-pink-200 via-rose-100 to-pink-300 p-4 transition-all duration-1000">
+        <div class="text-center max-w-lg w-full">
+            <div class="mb-6 inline-block relative">
+                <div class="text-6xl text-rose-500 heart-pulse inline-block filter drop-shadow-lg">
+                    <i class="fa-solid fa-heart"></i>
+                </div>
+            </div>
+            
+            <h1 class="font-dancing text-4xl sm:text-5xl font-bold text-rose-600 mb-3 drop-shadow-sm">
+                Gửi Thiên Thần Của Anh 💕
+            </h1>
+            <p class="text-slate-600 mb-8 font-medium text-sm sm:text-base px-4">
+                Hôm nay là Ngày Phụ nữ Việt Nam 20/10. Anh có một món quà bất ngờ nho nhỏ tự tay chuẩn bị riêng cho em...
+            </p>
+
+            <!-- Interactive Gift Button -->
+            <button id="openGiftBtn" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-300 bg-gradient-to-r from-rose-500 via-pink-500 to-rose-600 rounded-full shadow-xl hover:shadow-rose-400/50 hover:scale-105 active:scale-95">
+                <span class="mr-3">Bấm Để Mở Món Quà Bí Mật</span>
+                <i class="fa-solid fa-heart text-xl group-hover:scale-125 transition-transform duration-300"></i>
+            </button>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT CONTAINER (Hidden initially) -->
+    <main id="mainContent" class="opacity-0 transition-opacity duration-1000 max-w-5xl mx-auto px-4 py-8 space-y-16 pb-24">
+
+        <!-- HEADER BANNER -->
+        <header class="text-center pt-8">
+            <span class="inline-block px-4 py-1.5 rounded-full bg-pink-100 text-rose-600 font-semibold text-xs sm:text-sm tracking-wider uppercase mb-3 border border-pink-200 shadow-sm">
+                🌸 Special Gift for 20/10 🌸
+            </span>
+            <h1 class="font-dancing text-5xl sm:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-600 via-pink-600 to-red-500 pb-2">
+                Happy Vietnamese Women's Day
+            </h1>
+            <p class="text-slate-600 font-medium text-base sm:text-lg mt-2">
+                Chúc cô gái xinh đẹp nhất thế giới của anh luôn rạng rỡ và hạnh phúc! ✨
+            </p>
+        </header>
+
+        <!-- 2. LOVE LETTER SECTION -->
+        <section class="glass-panel rounded-3xl p-6 sm:p-10 relative overflow-hidden shadow-xl border-2 border-pink-200/60">
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-rose-200/50 rounded-full blur-2xl"></div>
+            <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-pink-300/40 rounded-full blur-2xl"></div>
+
+            <div class="relative z-10 max-w-3xl mx-auto">
+                <div class="flex items-center gap-3 border-b border-pink-200/80 pb-4 mb-6">
+                    <div class="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center text-rose-500 text-lg">
+                        <i class="fa-solid fa-envelope-open-text"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-dancing text-2xl sm:text-3xl font-bold text-rose-700">Thư gửi em - 20/10</h2>
+                        <p class="text-xs text-slate-400">Gửi từ trái tim tràn ngập yêu thương</p>
+                    </div>
+                </div>
+
+                <!-- Typing Letter Body -->
+                <div class="font-dancing text-xl sm:text-2xl text-slate-700 leading-relaxed min-h-[180px]" id="letterContent">
+                    <!-- Typing effect will populate text here -->
+                </div>
+
+                <div class="text-right mt-6 pt-4 border-t border-pink-100 font-dancing text-2xl font-bold text-rose-600">
+                    Mãi yêu em ❤️
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 3D MEMORY CAROUSEL GALLERY -->
+        <section class="text-center">
+            <h2 class="font-dancing text-4xl font-bold text-rose-700 mb-2">Khoảnh Khắc Xinh Đẹp</h2>
+            <p class="text-slate-500 text-sm mb-8">Nụ cười của em là điều tuyệt vời nhất anh từng thấy</p>
+
+            <div class="carousel-3d-container py-6">
+                <div class="carousel-3d-stage" id="carouselStage">
+                    <!-- Carousel Cards populated by JS -->
+                </div>
+            </div>
+
+            <!-- Carousel Nav Controls -->
+            <div class="flex justify-center items-center gap-4 mt-6">
+                <button id="prevBtn" class="w-12 h-12 rounded-full glass-panel text-rose-600 hover:bg-rose-500 hover:text-white transition shadow flex items-center justify-center">
+                    <i class="fa-solid fa-chevron-left text-lg"></i>
+                </button>
+                <span id="carouselIndex" class="text-xs font-bold text-rose-600 bg-pink-100 px-3 py-1 rounded-full">1 / 5</span>
+                <button id="nextBtn" class="w-12 h-12 rounded-full glass-panel text-rose-600 hover:bg-rose-500 hover:text-white transition shadow flex items-center justify-center">
+                    <i class="fa-solid fa-chevron-right text-lg"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- 4. REASONS WHY YOU ARE SPECIAL (FLIP CARDS) -->
+        <section class="space-y-6">
+            <div class="text-center">
+                <h2 class="font-dancing text-4xl font-bold text-rose-700 mb-2">Vì Sao Em Là Điều Đặc Biệt?</h2>
+                <p class="text-slate-500 text-sm">Chạm vào từng ô để khám phá những điều khiến anh thương em nhất nhé!</p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div class="flip-card h-48 cursor-pointer group" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-panel border-2 border-pink-200 flex flex-col items-center justify-center p-6 text-center hover:border-rose-400 transition">
+                            <span class="text-4xl mb-3">😊</span>
+                            <h3 class="font-bold text-rose-600 text-lg">Nụ Cười Tỏa Nắng</h3>
+                            <p class="text-xs text-slate-400 mt-2">Bấm để lật xem...</p>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-rose-400 to-pink-500 text-white flex flex-col items-center justify-center p-6 text-center shadow-lg">
+                            <p class="text-sm font-medium">"Mỗi lần thấy em cười, mọi mệt mỏi trong anh đều biến mất hoàn toàn."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="flip-card h-48 cursor-pointer group" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-panel border-2 border-pink-200 flex flex-col items-center justify-center p-6 text-center hover:border-rose-400 transition">
+                            <span class="text-4xl mb-3">🌸</span>
+                            <h3 class="font-bold text-rose-600 text-lg">Sự Dịu Dàng</h3>
+                            <p class="text-xs text-slate-400 mt-2">Bấm để lật xem...</p>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-pink-500 to-rose-500 text-white flex flex-col items-center justify-center p-6 text-center shadow-lg">
+                            <p class="text-sm font-medium">"Cách em quan tâm, lắng nghe và ở bên cạnh khiến anh cảm thấy vô cùng may mắn."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="flip-card h-48 cursor-pointer group" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-panel border-2 border-pink-200 flex flex-col items-center justify-center p-6 text-center hover:border-rose-400 transition">
+                            <span class="text-4xl mb-3">🥺</span>
+                            <h3 class="font-bold text-rose-600 text-lg">Lúc Dỗi Đáng Yêu</h3>
+                            <p class="text-xs text-slate-400 mt-2">Bấm để lật xem...</p>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-rose-500 to-pink-600 text-white flex flex-col items-center justify-center p-6 text-center shadow-lg">
+                            <p class="text-sm font-medium">"Ngay cả những lúc em phồng má giận dỗi, em vẫn là cô gái đáng yêu nhất!"</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="flip-card h-48 cursor-pointer group" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-panel border-2 border-pink-200 flex flex-col items-center justify-center p-6 text-center hover:border-rose-400 transition">
+                            <span class="text-4xl mb-3">💖</span>
+                            <h3 class="font-bold text-rose-600 text-lg">Tình Cảm Chân Thành</h3>
+                            <p class="text-xs text-slate-400 mt-2">Bấm để lật xem...</p>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-rose-400 to-pink-500 text-white flex flex-col items-center justify-center p-6 text-center shadow-lg">
+                            <p class="text-sm font-medium">"Cảm ơn em vì đã đến và mang lại thật nhiều màu sắc tươi đẹp cho cuộc sống của anh."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 5 -->
+                <div class="flip-card h-48 cursor-pointer group" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-panel border-2 border-pink-200 flex flex-col items-center justify-center p-6 text-center hover:border-rose-400 transition">
+                            <span class="text-4xl mb-3">✨</span>
+                            <h3 class="font-bold text-rose-600 text-lg">Sự Tinh Tế</h3>
+                            <p class="text-xs text-slate-400 mt-2">Bấm để lật xem...</p>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-pink-500 to-rose-500 text-white flex flex-col items-center justify-center p-6 text-center shadow-lg">
+                            <p class="text-sm font-medium">"Em luôn biết cách thấu hiểu và đem lại năng lượng tích cực cho mọi người xung quanh."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 6 -->
+                <div class="flip-card h-48 cursor-pointer group" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front glass-panel border-2 border-pink-200 flex flex-col items-center justify-center p-6 text-center hover:border-rose-400 transition">
+                            <span class="text-4xl mb-3">👑</span>
+                            <h3 class="font-bold text-rose-600 text-lg">Là Chính Em</h3>
+                            <p class="text-xs text-slate-400 mt-2">Bấm để lật xem...</p>
+                        </div>
+                        <div class="flip-card-back bg-gradient-to-br from-rose-500 to-pink-600 text-white flex flex-col items-center justify-center p-6 text-center shadow-lg">
+                            <p class="text-sm font-medium">"Đơn giản vì em là chính em – món quà tuyệt vời nhất mà anh có được."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. INTERACTIVE WISH COUPONS / MINI GAME -->
+        <section class="glass-panel rounded-3xl p-6 sm:p-10 shadow-xl border-2 border-pink-200">
+            <div class="text-center max-w-xl mx-auto mb-8">
+                <h2 class="font-dancing text-4xl font-bold text-rose-700 mb-2">Điều Ước Đặc Biệt Dành Cho Em 👑</h2>
+                <p class="text-slate-600 text-sm">Hôm nay em là công chúa! Chọn một đặc quyền mà em muốn anh thực hiện ngay nhé:</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
+                <button onclick="claimWish('Được đi ăn đồ nướng cùng anh')" class="wish-btn flex items-center justify-between p-4 rounded-2xl bg-white/80 border border-pink-200 hover:border-rose-400 hover:bg-rose-50 transition shadow-sm text-left group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🍖</span>
+                        <span class="font-semibold text-slate-700 group-hover:text-rose-600">Được đi ăn đồ nướng cùng anh</span>
+                    </div>
+                    <i class="fa-solid fa-circle-check text-slate-300 group-hover:text-rose-500 text-xl transition"></i>
+                </button>
+
+           <button onclick="claimWish('Được bao trà sữa full topping')" class="wish-btn flex items-center justify-between p-4 rounded-2xl bg-white/80 border border-pink-200 hover:border-rose-400 hover:bg-rose-50 transition shadow-sm text-left group">
+    <div class="flex items-center gap-3">
+        <span class="text-2xl text-rose-500"><i class="fa-solid fa-glass-water font-bold"></i></span>
+        <span class="font-semibold text-slate-700 group-hover:text-rose-600">Được bao trà sữa full topping</span>
+    </div>
+    <i class="fa-solid fa-circle-check text-slate-300 group-hover:text-rose-500 text-xl transition"></i>
+</button>
+
+                <button onclick="claimWish('Được ôm thật chặt 100 cái')" class="wish-btn flex items-center justify-between p-4 rounded-2xl bg-white/80 border border-pink-200 hover:border-rose-400 hover:bg-rose-50 transition shadow-sm text-left group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🤗</span>
+                        <span class="font-semibold text-slate-700 group-hover:text-rose-600">Được ôm thật chặt 100 cái</span>
+                    </div>
+                    <i class="fa-solid fa-circle-check text-slate-300 group-hover:text-rose-500 text-xl transition"></i>
+                </button>
+
+                <button onclick="claimWish('Đi dạo ngắm biển/thành phố')" class="wish-btn flex items-center justify-between p-4 rounded-2xl bg-white/80 border border-pink-200 hover:border-rose-400 hover:bg-rose-50 transition shadow-sm text-left group">
+                    <div class="flex items-center gap-3">
+                        <span class="text-2xl">🌅</span>
+                        <span class="font-semibold text-slate-700 group-hover:text-rose-600">Đi dạo ngắm biển/thành phố</span>
+                    </div>
+                    <i class="fa-solid fa-circle-check text-slate-300 group-hover:text-rose-500 text-xl transition"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- FOOTER WITH FLOATING HEART SPAMMER -->
+        <footer class="text-center pt-8 border-t border-pink-200/60">
+            <p class="font-dancing text-2xl text-rose-600 mb-4">Em có thích món quà này không?</p>
+            <button id="spamHeartBtn" class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-rose-500 text-white font-bold shadow-lg hover:bg-rose-600 active:scale-90 transition duration-150">
+                <i class="fa-solid fa-heart text-xl animate-bounce"></i>
+                <span>Thả tim cho anh nè!</span>
+                <span id="heartCount" class="bg-white/20 px-2 py-0.5 rounded-full text-xs ml-1">0</span>
+            </button>
+            <p class="text-xs text-slate-400 mt-6">Created with ❤️ exclusively for you on 20/10</p>
+        </footer>
+
+    </main>
+
+    <!-- SUCCESS POPUP MODAL -->
+    <div id="wishModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-panel max-w-sm w-full rounded-3xl p-6 text-center shadow-2xl border-2 border-white transform scale-90 transition-transform duration-300" id="wishModalCard">
+            <div class="w-16 h-16 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center mx-auto text-3xl mb-4 shadow-inner">
+                🎁
+            </div>
+            <h3 class="font-dancing text-3xl font-bold text-rose-600 mb-2">Yêu Cầu Đã Ghi Nhận!</h3>
+            <p id="wishModalText" class="text-slate-600 text-sm mb-6 font-medium">...</p>
+            <button onclick="closeWishModal()" class="w-full py-3 rounded-full bg-gradient-to-r from-rose-500 to-pink-500 text-white font-bold shadow-md hover:opacity-95 transition">
+                Dạ tuyệt vời luôn! 💕
+            </button>
+        </div>
+    </div>
+
+    <!-- External Script -->
+    <script src="script.js"></script>
+</body>
+</html>
